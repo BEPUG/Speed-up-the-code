@@ -18,15 +18,15 @@ Measure-Command {
     for ($i = 0; $i -lt 50000; $i++) {
         $ts = $baseTime.AddSeconds(-$i)
         $timestamp = "{0:yyyy-MM-dd HH:mm:ss}" -f $ts
-        $plc = $plcNames[$rand.Next(0, $plcNames.Length)]
+        $plc = $plcNames[$rand.Next(4)]
         $operator = $rand.Next(101, 121)
         $batch = $rand.Next(1000, 1101)
-        $status = $statusCodes[$rand.Next(0, $statusCodes.Length)]
-        $machineTemp = [math]::Round($rand.Next(60, 110) + $rand.NextDouble(), 2)
+        $status = $statusCodes[$rand.Next(0, 3)]
+        $machineTemp = [math]::Round($rand.Next(60, 110) + $rand.Next(), 2)
         $load = $rand.Next(0, 101)
 
         if ($rand.Next(1, 8) -eq 4) {
-            $errorType = $errorTypes[$rand.Next(0, $errorTypes.Length)]
+            $errorType = $errorTypes[$rand.Next(0, 4)]
             if ($errorType -eq 'Sandextrator overload') {
                 $value = $rand.Next(1, 11)
                 $lines.Add("ERROR; $timestamp; $plc; $errorType; $value; $status; $operator; $batch; $machineTemp; $load")
