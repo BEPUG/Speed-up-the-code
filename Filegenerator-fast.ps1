@@ -1,4 +1,4 @@
-Measure-Command {
+function New-PlcLog {
     $bigFileName = "plc_log.txt"
     $plcNames = [string[]]@('PLC_A','PLC_B','PLC_C','PLC_D')
     $errorTypes = [string[]]@(
@@ -42,3 +42,15 @@ Measure-Command {
     [System.IO.File]::WriteAllLines($bigFileName, $lines)
     Write-Output "PLC log file generated."
 }
+
+# 2) One-time warm-up (not measured)
+if (-not $global:jitted) {
+    # Call everything you’ll use once so it gets JIT-compiled
+    New-PlcLog
+    [void][System.Random]::new().Next(0,1)
+    [void][DateTime]::UtcNow
+    $global:jitted = $true
+}
+
+# 3) Now measure only the real work
+Measure-Command { New-PlcLog } 
